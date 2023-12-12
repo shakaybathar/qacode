@@ -51,7 +51,6 @@ public class main {
                 String fName1 = "";
                 String lName1 = "";
                 String email1 = "";
-//                String email1 = "shakayb@nxtdevs.com";
                 envAndJobType = new getUrlWithEnvAndJobType();
 
                 for (int i = 0 ; i < 1 ; i++){

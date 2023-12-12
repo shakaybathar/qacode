@@ -4,9 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import java.io.FileInputStream;
 import java.text.ParseException;
-import java.util.Properties;
 /*import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;*/
@@ -14,24 +12,19 @@ import java.time.temporal.ChronoUnit;*/
 public class collectionBooking {
     public void collectionBooking (WebDriver driver, String fName,String lName,String email,int promo,String todayDate, String env,String bookingType) throws ParseException, InterruptedException {
 
-        Properties properties = new Properties();
+        try {
 
-        try (FileInputStream input = new FileInputStream("inputField.properties")) {
-            properties.load(input);
             int sqFt = 9;
-
-            //        String fName = "assetswo";
-            //        String lName = "subsshk";
-            //        String email = fName+"."+env+"."+lName+"@bystored.com";
             String postCode = "Sw6 1YX";
+            int isManAddress = 1;
             String manAddress = "testing manual address";
             String phone = "7894561230";
             int setPassword = 1;
 
-            /*Map<String, Object> res = calculateMonths.monthsBetween(driver,todayDate,"collection");
-            long monthsBetween = (Long) res.get("monthsBetween");*/
+            WebElement locatorBookOnlineCta = driver.findElement(myLocators.bookOnlineCta);
+            locatorBookOnlineCta.click(); // Click on Book Online CTA from main page
 
-            driver.findElement(By.xpath("//*[@id=\"myHeader\"]/div[3]/ul/li[2]/a")).click();
+            // selecting storage unit / sqft
 
             switch (sqFt) {
                 case 9 -> sqFt = 1;
@@ -42,11 +35,11 @@ public class collectionBooking {
                 case 75 -> sqFt = 6;
                 case 100 -> sqFt = 7;
             }
-
-            // selecting storage unit / sqft
             driver.findElement(By.xpath("/html/body/section[1]/div/div/div[3]/div[1]/div/div[" + sqFt + "]/div/label")).click();
-            Thread.sleep(1000);
-            driver.findElement(By.id("step1-cta-next")).click(); // storage length selected
+
+            WebElement locatorSqFtSelect = driver.findElement(myLocators.clickSqFt); //
+            locatorSqFtSelect.click();
+            System.out.println("storage length selected!");
             Thread.sleep(2000);
 
 
@@ -59,45 +52,73 @@ public class collectionBooking {
             driver.findElement(By.xpath("/html/body/section[2]/div/div/div[1]/ul/li[" + promo + "]/label")).click();
             Thread.sleep(1000);
             driver.findElement(By.id("step2-cta-next")).click(); // storage length selected
+            System.out.println("promotion or duration selected!");
             Thread.sleep(2000);
 
             // enter pick-up details / customer info
-            //        driver.findElement(By.id("postCode")).clear();
-            driver.findElement(By.id("postCode")).sendKeys(postCode);
-            driver.findElement(By.id("enter-address-manually")).click();
+            WebElement userPostCode = driver.findElement(myLocators.postCode);
+            userPostCode.sendKeys(postCode);
+
+            if(isManAddress == 0){
+                userPostCode.clear();
+                System.out.println("Select address from drop-down search!");
+            }else {
+                WebElement isManual = driver.findElement(myLocators.clickIsManual);
+                isManual.click();
+                Thread.sleep(2000);
+
+                WebElement locatorAddressManually = driver.findElement(myLocators.addressManually);
+                locatorAddressManually.sendKeys(manAddress);
+            }
+
+
+            WebElement locatorFname = driver.findElement(myLocators.fname);
+            locatorFname.sendKeys(fName);
+
+            WebElement locatorLname = driver.findElement(myLocators.lname);
+            locatorLname.sendKeys(lName);
+
+            WebElement locatorEmail = driver.findElement(myLocators.email);
+            locatorEmail.sendKeys(email);
+
+            WebElement locatorPhone = driver.findElement(myLocators.phone);
+            locatorPhone.sendKeys(phone);
             Thread.sleep(2000);
-            driver.findElement(By.id("addressManually")).sendKeys(manAddress);
-            driver.findElement(By.id("fname")).sendKeys(fName);
-            driver.findElement(By.id("lname")).sendKeys(lName);
-            //        driver.findElement(By.id("email")).sendKeys("talib@nxtdevs.com");
-            driver.findElement(By.id("email")).sendKeys(email);
-            driver.findElement(By.id("phone")).sendKeys(phone);
-            Thread.sleep(2000);
-            driver.findElement(By.id("step3-cta-next")).click(); // user info entered
+
+            WebElement submitUserInfo = driver.findElement(myLocators.submitUserInfo);
+            submitUserInfo.click(); // user info entered
             Thread.sleep(2000);
 
             String searchText = "Looks like you already have an account";
             WebElement element = driver.findElement(By.xpath("//*[contains(text(), '" + searchText + "')]"));
 
             if ( element.isDisplayed() ) {
-                System.out.println("Email already exists in our database");
+                System.out.println("Email Exists!");
                 Thread.sleep(5000);
             } else {
                 System.out.println("New Email!");
             }
+            System.out.println("User details submitted!");
 
 
             calculateMonths.monthsBetween(driver, todayDate, "collection");
             System.out.println("Date selected!");
             //        select pick-up window
             driver.findElement(By.id("arrival-load")).click(); // Load More
-            driver.findElement(By.xpath("//*[@id=\"generic-slot\"]/ul/li[1]/label")).click(); // 09:00 - 18:00
+
+
+            WebElement locatorTs9_6 = driver.findElement(myLocators.ts9_6); // 09:00 - 18:00
+            locatorTs9_6.click();
             //        driver.findElement(By.xpath("/html/body/section[4]/div[2]/div[2]/div/ul/li[5]/label")).click(); // 16:00 - 17:00
-            System.out.println("Time slot  selected!");
+            System.out.println("Time slot clicked!");
             Thread.sleep(1000);
             driver.findElement(By.xpath("/html/body/section[5]/div/div[2]/a/button")).click(); // continue button
+            System.out.println("Time slot selected!");
             Thread.sleep(2000);
+
+
             driver.findElement(By.xpath("//*[@id=\"section6\"]/div/ul/li[2]/label")).click(); // Yes, help me pack
+            System.out.println("Assistant selected!");
             Thread.sleep(2000);
 //            driver.findElement(By.id("emailQuote")).click(); // Email Quote
 //            System.out.println("email quote done");
