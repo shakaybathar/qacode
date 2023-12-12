@@ -8,20 +8,18 @@ import java.text.ParseException;
 import java.util.List;
 
 public class returnBooking {
-    public static void returnAssets (WebDriver driver, String todayDate, String bookingType) throws ParseException, InterruptedException {
+    public static void returnAssets (WebDriver driver,String email,String password, String todayDate, String bookingType, int itemsToReturn, int isAssistantNeeded, String addressType, int restriction, int parking, int stairs) throws ParseException, InterruptedException {
 
         loginUser user = new loginUser();
-        user.login(driver);
+        user.login(driver,email,password);
 
-        int itemsToReturn = 1; // -1 for all, 0 for none , 1 for partial
-        int isAssistantNeeded = 0;
         Thread.sleep(10000);
         driver.findElement(By.xpath("/html/body/div[3]/div[2]/ul/li[3]/a")).click();
 
         List<WebElement> isAssets = driver.findElements(By.xpath("/html/body/div[1]/p[1]"));
         Thread.sleep(1000);
 
-        // Check if the div element exists
+        // Check if assets are uploaded or not
         if (isAssets.size() > 0) {
             String noAssets = driver.findElement(By.xpath("/html/body/div[1]/p[1]")).getText();
             System.out.println(noAssets);
@@ -37,12 +35,6 @@ public class returnBooking {
                     break;
                 case 1:
                     List<WebElement> assetArray = driver.findElements(By.name("assets[]"));
-                    /*
-                    for (WebElement assetArr : assetArray) {
-                        String id = assetArr.getAttribute("id");
-                        System.out.println("Element ID: " + id);
-                    }
-                    */
                     for (int i = 0; i < itemsToReturn; i++) {
                         driver.findElement(By.id(assetArray.get(i).getAttribute("id"))).click();
                     }
@@ -63,14 +55,13 @@ public class returnBooking {
             Thread.sleep(3000);
             driver.findElement(By.id("step2")).click();
 
+            addressAndParkingInfo(driver,addressType,restriction,parking,stairs);
+            returnDateAndTime(driver,todayDate,bookingType);
         }
-        addressAndParkingInfo(driver);
-        returDateAndTime(driver,todayDate,bookingType);
     }
 
-    public static void addressAndParkingInfo(WebDriver driver) throws InterruptedException { // step3
+    public static void addressAndParkingInfo(WebDriver driver, String addressType, int restriction, int parking, int stairs) throws InterruptedException { // step3
 
-        String addressType = "selected"; // manual , loqate , selected
         switch (addressType){
             case "selected":
                 driver.findElement(By.xpath("//*[@id=\"select2-existing-addresses-container\"]/span")).click();
@@ -92,21 +83,18 @@ public class returnBooking {
         Thread.sleep(2000);
 
         driver.findElement(By.id("restricted-access")).click();
-        int restriction = 0;
         switch (restriction) {
             case 0 -> driver.findElement(By.cssSelector("[data-id='Yes']")).click();
             case 1 -> driver.findElement(By.cssSelector("[data-id='No']")).click();
         }
 
         driver.findElement(By.id("selectedParkingText")).click();
-        int parking = 0; // 0 = immediate parking | 1 = 100 meters from enterance
         switch (parking) {
             case 0 -> driver.findElement(By.cssSelector("[data-id='PARKING_0']")).click();
             case 1 -> driver.findElement(By.cssSelector("[data-id='PARKING_100']")).click();
         }
 
         driver.findElement(By.id("selectedFloorText")).click();
-        int stairs = 0; // -1 = lift | 0 = ground floor | 1 = 7th floor
         switch (stairs) {
             case -1 -> driver.findElement(By.cssSelector("[data-id='FLOOR_LIFT']")).click();
             case 0 -> driver.findElement(By.cssSelector("[data-id='FLOOR_0']")).click();
@@ -117,7 +105,7 @@ public class returnBooking {
         driver.findElement(By.id("step3")).click();
     }
 
-    public static void returDateAndTime(WebDriver driver, String todayDate, String bookingType) throws InterruptedException, ParseException { // step4
+    public static void returnDateAndTime(WebDriver driver, String todayDate, String bookingType) throws InterruptedException, ParseException { // step4
         driver.findElement(By.id("returnDate")).click();
         calculateMonths.monthsBetween(driver, todayDate, bookingType);
         Thread.sleep(5000);
@@ -125,7 +113,7 @@ public class returnBooking {
         driver.findElement(By.xpath("/html/body/form/fieldset[4]/div/div[1]/div/div[1]/div[2]/div/div/div/div/ul/li")).click();
         driver.findElement(By.id("agreement")).click();
         Thread.sleep(5000);
-        driver.findElement(By.id("paynow-return")).click();
+        driver.findElement(By.id("paynow-return")).click(); // create return booking
 
     }
 }

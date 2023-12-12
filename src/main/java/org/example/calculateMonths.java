@@ -8,15 +8,13 @@ import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
 
 public class calculateMonths {
 
     public static void monthsBetween(WebDriver driver, String todayDate, String jobType) throws ParseException, InterruptedException {
 
-        Map<String, Object> result = new HashMap<>();
-        String  bookingDate = "2023-12-05";
+
+        String  bookingDate = "2023-12-30";
         String dayName = nextWorkingDay.getNextWorkingDay(bookingDate);
         String jobDate = dayName.substring(8, 10);
         bookingDate = dayName;
@@ -25,13 +23,18 @@ public class calculateMonths {
                 YearMonth.from(LocalDate.parse(bookingDate))
         );
         String nextMonth = "";
-        System.out.println("jobType: " + jobType);
         switch (jobType){
-            case "collection"   -> nextMonth = "/html/body/section[4]/div[1]/div/div[2]/div/div/a[2]";
-            case "return"       -> nextMonth = "/html/body/div[17]/div/a[2]";
+            case "collection":
+                nextMonth = "/html/body/section[4]/div[1]/div/div[2]/div/div/a[2]";
+                break;
+
+            case "return":
+                driver.findElement(By.id("returnDate")).click(); // open return calendar
+                Thread.sleep(2000);
+                nextMonth = "/html/body/div[15]/div/a[2]/span"; // click on next
+                break;
 
         }
-        System.out.println("nextMonth: " + nextMonth);
 
         for(int i = 1; i <= monthsBetween; i++){
             driver.findElement(By.xpath(nextMonth)).click(); // change calendar month

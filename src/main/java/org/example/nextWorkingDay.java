@@ -43,7 +43,7 @@ public class nextWorkingDay {
             default:
                 dayOfWeekString = "error";
         }
-        System.out.println("dayOfWeekString: " + dayOfWeekString);
+
         return date;
     }
 }
