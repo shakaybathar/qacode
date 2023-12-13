@@ -7,6 +7,7 @@ import java.util.Date;
 
 public class nextWorkingDay {
     public static String getNextWorkingDay (String date) throws ParseException {
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date date1 = sdf.parse(date);
         Calendar calendar = Calendar.getInstance();

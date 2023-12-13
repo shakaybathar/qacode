@@ -2,9 +2,6 @@ package org.example;
 
 import org.openqa.selenium.WebDriver;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-
 
 public class main {
 
@@ -14,14 +11,11 @@ public class main {
 //        WebDriver driver = browser.setupChromeDriverProperty();
         WebDriver driver = null;
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime now = LocalDateTime.now();
-        String todayDate = dtf.format(now);
+        calculateMonths cal = new calculateMonths();
+        String todayDate = cal.getToday();
 
         String env = "stage";
         String bookingType = "login"; // collection | return | login
-        /*getUrlWithEnvAndJobType envAndJobType = new getUrlWithEnvAndJobType();
-        envAndJobType.getUrlWithEnvAndJobType(driver,env,bookingType);*/
 
         String email = "test.shk@bystored.com";
         String password = "12345";
@@ -30,15 +24,12 @@ public class main {
         switch (bookingType){
 
             case "login":
+
                 driver = browser.setupChromeDriverProperty();
-
                 envAndJobType.getUrlWithEnvAndJobType(driver,env,bookingType);
-
                 loginTest lg = new loginTest(driver);
-//                lg.testLogin(email,password,"mainJavaFiles");
                 lg.loginCases();
                 break;
-
 
             case "collection":
 

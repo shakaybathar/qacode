@@ -38,7 +38,7 @@ public class loginTest {
         testLogin("invalidUsername", "12345");
         testLogin("shakayb@nxtdevs.com", "invalidPassword");
         testLogin("invalidEmail", "invalidPassword");
-      testLogin("shakayb@nxtdevs.com", "12345");
+        testLogin("shakayb@nxtdevs.com", "12345");
 
     }
 
@@ -67,6 +67,12 @@ public class loginTest {
         WebElement loginError = driver.findElement(myLocators.loginError);
         String errorMessage =  loginError.getText();
         System.out.println("loginErrorSize: " + errorMessage.length());
+
+
+
+        createStatusFile export = new createStatusFile();
+        export.createStatus(errorMessage);
+
 
         if ( errorMessage.length() > 0 ) {
 

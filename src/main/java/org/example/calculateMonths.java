@@ -6,7 +6,9 @@ import org.openqa.selenium.WebElement;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 public class calculateMonths {
@@ -44,5 +46,20 @@ public class calculateMonths {
         String date = e.getText();
         driver.findElement(By.linkText(date)).click();
         Thread.sleep(10000);
+    }
+
+    public static String getToday(){
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now = LocalDateTime.now();
+        String todayDate = dtf.format(now);
+        return todayDate;
+    }
+    public static String getNow(){
+
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        LocalDateTime now = LocalDateTime.now();
+        String dateTime = now.format(dtf);
+        return dateTime;
     }
 }
