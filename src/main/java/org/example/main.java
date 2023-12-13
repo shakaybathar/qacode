@@ -2,14 +2,13 @@ package org.example;
 
 import org.openqa.selenium.WebDriver;
 
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
 public class main {
 
-    public static void main(String[] args) throws InterruptedException, ParseException {
+    public static void main(String[] args) throws Exception {
 
         setupChromeDriverProperty browser = new setupChromeDriverProperty();
 //        WebDriver driver = browser.setupChromeDriverProperty();
@@ -20,7 +19,7 @@ public class main {
         String todayDate = dtf.format(now);
 
         String env = "stage";
-        String bookingType = "collection"; // collection | return | login
+        String bookingType = "login"; // collection | return | login
         /*getUrlWithEnvAndJobType envAndJobType = new getUrlWithEnvAndJobType();
         envAndJobType.getUrlWithEnvAndJobType(driver,env,bookingType);*/
 
@@ -35,8 +34,9 @@ public class main {
 
                 envAndJobType.getUrlWithEnvAndJobType(driver,env,bookingType);
 
-                loginUser lg = new loginUser();
-                lg.login(driver,email,password);
+                loginTest lg = new loginTest(driver);
+//                lg.testLogin(email,password,"mainJavaFiles");
+                lg.loginCases();
                 break;
 
 
@@ -53,7 +53,17 @@ public class main {
                 String email1 = "";
                 envAndJobType = new getUrlWithEnvAndJobType();
 
-                for (int i = 0 ; i < 1 ; i++){
+
+
+                fName1 = "fname";
+                lName1 = "lname";
+                email1 = fName1+"."+env+"."+lName1+"@bystored.com";
+//                driver = browser.setupChromeDriverProperty();
+                envAndJobType.getUrlWithEnvAndJobType(driver,env,bookingType);
+//                System.out.println("this is loop # " + i);
+                collection.collectionBooking(driver,fName1,lName1,email1,promo1,todayDate,env,bookingType);
+
+                /*for (int i = 0 ; i < 1 ; i++){
                     fName1 = "shaka70077yb_0s" + i;
                     lName1 = "loop_0s" + i;
                     email1 = fName1+"."+env+"."+lName1+"@bystored.com";
@@ -62,7 +72,7 @@ public class main {
                     System.out.println("this is loop # " + i);
                     collection.collectionBooking(driver,fName1,lName1,email1,promo1,todayDate,env,bookingType);
                     driver.quit();
-                }
+                }*/
                 break;
 
             case "return":
@@ -83,11 +93,13 @@ public class main {
 //        Thread.sleep(10000);
 //        driver.quit();
     }
+
     /*private static WebDriver setupChromeDriverProperty() throws InterruptedException {
         System.setProperty("webdriver.chrome.driver","C:\\chromeDriver\\chromedriver_v119.exe");
         WebDriver driver = new ChromeDriver();
         Thread.sleep(2000);
         return driver;
     }*/
+
 }
 
