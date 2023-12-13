@@ -10,8 +10,8 @@ import java.util.List;
 public class returnBooking {
     public static void returnAssets (WebDriver driver,String email,String password, String todayDate, String bookingType, int itemsToReturn, int isAssistantNeeded, String addressType, int restriction, int parking, int stairs) throws ParseException, InterruptedException {
 
-        loginUser user = new loginUser();
-        user.login(driver,email,password);
+        loginTest user = new loginTest();
+//        user.testLogin(email,password,"returnAssets");
 
         Thread.sleep(10000);
         driver.findElement(By.xpath("/html/body/div[3]/div[2]/ul/li[3]/a")).click();

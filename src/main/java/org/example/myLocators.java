@@ -21,6 +21,7 @@ public class myLocators {
     public static By lname = By.id("lname");
 
     public static By email = By.id("email");
+    public static By password = By.id("password");
 
     public static By phone = By.id("phone");
 
@@ -35,7 +36,9 @@ public class myLocators {
     // Example 4: Using CSS Selector locator
     public static By emailByCssSelector = By.cssSelector("input[type='email']");
 
-    // Example 5: Using Class Name locator
-    public static By submitButtonByClassName = By.className("submit-button");
+    public static By submitLogin = By.id("btnLoginSubmit");
+    public static By loginError = By.id("loginErrorMsg");
+    public static By welcome = By.className("welco6e");
+
 
 }
